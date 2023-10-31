@@ -37,10 +37,10 @@ USER ${NB_UID}
 # files across image layers when the permissions change
 WORKDIR /tmp
 RUN mamba install --yes \
-    'jupyterlab~=3.5.3' \
-    'notebook~=6.5.5' \
-    'jupyterhub~=2.3.0' \
-    'nbclassic~=1.0.0' && \
+    'jupyterlab<4' \
+    'notebook<7' \
+    'jupyterhub' \
+    'nbclassic' && \
     jupyter server --generate-config && \
     jupyter notebook --generate-config && \
     mamba clean --all -f -y && \
