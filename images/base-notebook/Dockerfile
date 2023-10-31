@@ -54,7 +54,7 @@ ENV JUPYTER_PORT=8888
 EXPOSE $JUPYTER_PORT
 
 # Configure container startup
-CMD ["start-notebook.py"]
+CMD ["start-notebook.sh"]
 
 # Copy local files as late as possible to avoid cache busting
 COPY start-notebook.py start-notebook.sh start-singleuser.py start-singleuser.sh /usr/local/bin/
