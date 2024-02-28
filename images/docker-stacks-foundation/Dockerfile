@@ -5,18 +5,34 @@
 # https://hub.docker.com/_/ubuntu/tags?page=1&name=jammy
 ARG ROOT_CONTAINER=ubuntu:22.04
 
-FROM $ROOT_CONTAINER
+FROM ${ROOT_CONTAINER}
 
 LABEL maintainer="Jupyter Project <jupyter@googlegroups.com>"
-ARG NB_USER="cudaq"
+ARG NB_USER="jovyan"
 ARG NB_UID="1000"
 ARG NB_GID="100"
+ARG USER="jovyan"
 
 # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
+# Ensure we are running as root to have permissions to add users and groups
 USER root
+
+# Attempt to create the jovyan group if it doesn't exist, or use the existing group with GID 100
+RUN getent group 100 || groupadd -g 100 jovyan
+RUN useradd -m -s /bin/bash -u 1000 -g 100 -o -c "" jovyan \
+    && echo "jovyan ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/jovyan \
+    && chmod 0440 /etc/sudoers.d/jovyan
+
+# Ensure the home directory exists and transfer ownership
+RUN mkdir -p /home/jovyan \
+    && cp -rT /home/cudaq /home/jovyan \
+    && chown -R jovyan:100 /home/jovyan
+
+# Remove cudaq uid
+RUN sed -i '/^cudaq:/d' /etc/passwd
 
 # Install all OS dependencies for Server that starts
 # but lacks all features (e.g., download as all possible file formats)
@@ -122,6 +138,9 @@ RUN set -x && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
+# Add system cudaq module to base conda
+RUN echo "/opt/nvidia/cudaq" > ${CONDA_DIR}/lib/python3.10/site-packages/cudaq.pth
+
 # Configure container startup
 ENTRYPOINT ["tini", "-g", "--"]
 CMD ["start.sh"]
@@ -131,11 +150,15 @@ COPY run-hooks.sh start.sh /usr/local/bin/
 
 USER root
 
+# # Link conda python to system python so we can use system-installed cudaq
+# # This is less than ideal. Make certain the python verison match!
+# RUN ln -sf /usr/bin/python /opt/conda/bin/python
+
 # Create dirs for startup hooks
 RUN mkdir /usr/local/bin/start-notebook.d && \
     mkdir /usr/local/bin/before-notebook.d
 
 # Switch back to jovyan to avoid accidental container runs as root
-USER ${NB_UID}
+USER "jovyan"
 
 WORKDIR "${HOME}"
