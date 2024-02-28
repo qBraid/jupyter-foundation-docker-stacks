@@ -138,9 +138,6 @@ RUN set -x && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Add system cudaq module to base conda
-RUN echo "/opt/nvidia/cudaq" > ${CONDA_DIR}/lib/python3.10/site-packages/cudaq.pth
-
 # Configure container startup
 ENTRYPOINT ["tini", "-g", "--"]
 CMD ["start.sh"]
@@ -157,6 +154,9 @@ USER root
 # Create dirs for startup hooks
 RUN mkdir /usr/local/bin/start-notebook.d && \
     mkdir /usr/local/bin/before-notebook.d
+
+# Add system cudaq module to base conda
+RUN echo "/opt/nvidia/cudaq" > ${CONDA_DIR}/lib/python3.10/site-packages/cudaq.pth
 
 # Switch back to jovyan to avoid accidental container runs as root
 USER "jovyan"
