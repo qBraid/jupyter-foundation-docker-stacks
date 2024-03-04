@@ -56,8 +56,8 @@ docker run -it --rm \
 
 The default version of `Python` that ships with the image may not be the version you want.
 The instructions below permit adding a conda environment with a different `Python` version and making it accessible to Jupyter.
-You may also use older image like `jupyter/base-notebook:python-3.10`.
-List of all tags can be found [here](https://github.com/jupyter/docker-stacks/wiki)
+You may also use older images like `jupyter/base-notebook:python-3.10`.
+A list of all tags can be found [here](https://github.com/jupyter/docker-stacks/wiki)
 
 ```{literalinclude} recipe_code/custom_environment.dockerfile
 :language: docker
@@ -93,7 +93,7 @@ docker run -it --rm \
 This recipe is not tested and might be broken.
 ```
 
-See the README for a basic automation here
+See the README for basic automation here
 <https://github.com/jupyter/docker-stacks/tree/main/examples/make-deploy>
 which includes steps for requesting and renewing a Let's Encrypt certificate.
 
@@ -104,8 +104,8 @@ Ref: <https://github.com/jupyter/docker-stacks/issues/78>
 [RISE](https://github.com/jupyterlab-contrib/rise): "Live" Reveal.js JupyterLab Slideshow Extension.
 
 ```{note}
-We're providing the recipe to install JupyterLab extension.
-You can find the original Jupyter Notebook extenstion [here](https://github.com/damianavila/RISE)
+We're providing the recipe to install the JupyterLab extension.
+You can find the original Jupyter Notebook extension [here](https://github.com/damianavila/RISE)
 ```
 
 ```{literalinclude} recipe_code/rise_jupyterlab.dockerfile
@@ -132,7 +132,7 @@ Sometimes it is helpful to run the Jupyter instance behind an nginx proxy, for e
   and want nginx to help improve server performance in managing the connections
 
 Here is a [quick example of NGINX configuration](https://gist.github.com/cboettig/8643341bd3c93b62b5c2) to get started.
-You'll need a server, a `.crt` and `.key` file for your server, and `docker` & `docker-compose` installed.
+You'll need a server, a `.crt`, and a `.key` file for your server, and `docker` & `docker-compose` installed.
 Then download the files at that gist and run `docker-compose up` to test it out.
 Customize the `nginx.conf` file to set the desired paths and add other services.
 
@@ -178,7 +178,7 @@ You can find an example of using DockerSpawner [here](https://github.com/jupyter
 ### Containers with a specific version of JupyterHub
 
 The version of `jupyterhub` in your image should match the
-version in the JupyterHub itself.
+version in JupyterHub itself.
 To use a specific version of JupyterHub, do the following:
 
 ```{literalinclude} recipe_code/jupyterhub_version.dockerfile
@@ -187,7 +187,7 @@ To use a specific version of JupyterHub, do the following:
 
 ## Spark
 
-A few suggestions have been made regarding using Docker Stacks with spark.
+A few suggestions have been made regarding using Docker Stacks with Spark.
 
 ### Using PySpark with AWS S3
 
@@ -202,9 +202,9 @@ import os
 
 # To figure out what version of Hadoop, run:
 # ls /usr/local/spark/jars/hadoop*
-os.environ[
-    "PYSPARK_SUBMIT_ARGS"
-] = '--packages "org.apache.hadoop:hadoop-aws:2.7.3" pyspark-shell'
+os.environ["PYSPARK_SUBMIT_ARGS"] = (
+    '--packages "org.apache.hadoop:hadoop-aws:2.7.3" pyspark-shell'
+)
 
 import pyspark
 
@@ -226,9 +226,9 @@ Using Spark context for Hadoop 2.6.0
 ```python
 import os
 
-os.environ[
-    "PYSPARK_SUBMIT_ARGS"
-] = "--packages com.amazonaws:aws-java-sdk:1.10.34,org.apache.hadoop:hadoop-aws:2.6.0 pyspark-shell"
+os.environ["PYSPARK_SUBMIT_ARGS"] = (
+    "--packages com.amazonaws:aws-java-sdk:1.10.34,org.apache.hadoop:hadoop-aws:2.6.0 pyspark-shell"
+)
 
 import pyspark
 
@@ -259,9 +259,9 @@ This recipe is not tested and might be broken.
 ```python
 import os
 
-os.environ[
-    "PYSPARK_SUBMIT_ARGS"
-] = "--jars /home/jovyan/spark-streaming-kafka-assembly_2.10-1.6.1.jar pyspark-shell"
+os.environ["PYSPARK_SUBMIT_ARGS"] = (
+    "--jars /home/jovyan/spark-streaming-kafka-assembly_2.10-1.6.1.jar pyspark-shell"
+)
 import pyspark
 from pyspark.streaming.kafka import KafkaUtils
 from pyspark.streaming import StreamingContext
@@ -304,7 +304,7 @@ FROM quay.io/jupyter/all-spark-notebook
 ENV HADOOP_HOME /usr/local/hadoop-2.7.3
 ENV JAVA_HOME /usr/lib/jvm/java-8-openjdk-amd64
 ENV HADOOP_CONF_HOME /usr/local/hadoop-2.7.3/etc/hadoop
-ENV HADOOP_CONF_DIR  /usr/local/hadoop-2.7.3/etc/hadoop
+ENV HADOOP_CONF_DIR /usr/local/hadoop-2.7.3/etc/hadoop
 
 USER root
 # Add proper open-jdk-8 not the jre only, needed for pydoop
@@ -331,7 +331,7 @@ RUN echo 'deb https://cdn-fastly.deb.debian.org/debian jessie-backports main' > 
 COPY example-hadoop-conf/ /usr/local/hadoop-2.7.3/etc/hadoop/
 
 # Spark-Submit doesn't work unless I set the following
-RUN echo "spark.driver.extraJavaOptions -Dhdp.version=2.5.3.0-37" >> /usr/local/spark/conf/spark-defaults.conf  && \
+RUN echo "spark.driver.extraJavaOptions -Dhdp.version=2.5.3.0-37" >> /usr/local/spark/conf/spark-defaults.conf && \
     echo "spark.yarn.am.extraJavaOptions -Dhdp.version=2.5.3.0-37" >> /usr/local/spark/conf/spark-defaults.conf && \
     echo "spark.master=yarn" >>  /usr/local/spark/conf/spark-defaults.conf && \
     echo "spark.hadoop.yarn.timeline-service.enabled=false" >> /usr/local/spark/conf/spark-defaults.conf && \
@@ -401,7 +401,7 @@ This recipe only works for NBCassic with Jupyter Notebook < 7.
 It is recommended to use [jupyterlab-spellchecker](https://github.com/jupyterlab-contrib/spellchecker) in modern environments.
 ```
 
-```{literalinclude} recipe_code/spellcheck_notebookv6.dockerfile
+```{literalinclude} recipe_code/spellcheck_notebook_v6.dockerfile
 :language: docker
 ```
 
@@ -506,21 +506,21 @@ The following recipe demonstrates how to add functionality to read from and writ
 
 You can now use `pyodbc` and `sqlalchemy` to interact with the database.
 
-Pre-built images are hosted in the [realiserad/jupyter-docker-mssql](https://github.com/Realiserad/jupyter-docker-mssql) repository.
+Pre-built images are hosted in the [Realiserad/jupyter-docker-mssql](https://github.com/Realiserad/jupyter-docker-mssql) repository.
 
-## Add Oracle SQL Instant client, SQL\*Plus and other tools (Version 21.x)
+## Add Oracle SQL Instant client, SQL\*Plus, and other tools (Version 21.x)
 
 ```{note}
 This recipe only works for x86_64 architecture.
 ```
 
-The following recipe demonstrates how to add functionality to connect to a Oracle Database using [Oracle Instant Client](https://www.oracle.com/database/technologies/instant-client.html)
+The following recipe demonstrates how to add functionality to connect to an Oracle Database using [Oracle Instant Client](https://www.oracle.com/database/technologies/instant-client.html)
 in your notebook.
 This recipe installs version `21.11.0.0.0`.
 
 Nonetheless, go to the [Oracle Instant Client Download page](https://www.oracle.com/es/database/technologies/instant-client/linux-x86-64-downloads.html) for the complete list of versions available.
 You may need to perform different steps for older versions;
-the may be explained on the "Installation instructions" section of the Downloads page.
+they may be explained in the "Installation instructions" section of the Downloads page.
 
 ```{literalinclude} recipe_code/oracledb.dockerfile
 :language: docker

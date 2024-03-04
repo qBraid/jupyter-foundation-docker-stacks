@@ -7,7 +7,7 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "docker-stacks"
-copyright = "2023, Project Jupyter"
+copyright = "2024, Project Jupyter"
 author = "Project Jupyter"
 
 version = "latest"
@@ -29,7 +29,7 @@ language = "en"
 html_theme = "alabaster"
 html_static_path = ["_static"]
 
-# File above was generated using sphinx 6.2.1 with this command:
+# The file above was generated using sphinx 7.2.6 with this command:
 # sphinx-quickstart --project "docker-stacks" --author "Project Jupyter" -v "latest" -r "latest" -l en --no-sep --no-makefile --no-batchfile
 # These are custom options for this project
 
@@ -66,7 +66,6 @@ linkcheck_ignore = [
     r"https://github\.com/jupyter/docker-stacks/settings/actions/runners/new\?arch=arm64\&amp;os=linux",  # only works for users with permissions to change runners
     r"http://127\.0\.0\.1:.*",  # various examples
     r"https://mybinder\.org/v2/gh/.*",  # lots of 500 errors
-    r"https://mybinder.org",  # mybinder is down
 ]
 
 linkcheck_allowed_redirects = {

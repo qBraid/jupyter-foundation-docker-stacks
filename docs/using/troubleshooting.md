@@ -40,7 +40,7 @@ The following sections cover a few of these scenarios and how to fix them.
    You can change the ownership of the volume mount using the `chown` command.
    In the case of the docker-stacks images, you can set the `CHOWN_EXTRA` and `CHOWN_EXTRA_OPTS` environment variables.
 
-   For example, to change the ownership of the volume mount to the jovyan user (non-privileged default user in the Docker images):
+   For example, to change the ownership of the volume mount to the `jovyan` user (non-privileged default user in the Docker images):
 
    ```bash
    # running in detached mode - can also be run in interactive mode
@@ -77,14 +77,14 @@ The following sections cover a few of these scenarios and how to fix them.
       - If you are mounting your volume inside the `/home/` directory, you can use the `-e CHOWN_HOME=yes` and `CHOWN_HOME_OPTS="-R"` flags
       instead of the `-e CHOWN_EXTRA` and `-e CHOWN_EXTRA_OPTS` in the example above.
       - This solution should work in most cases where you have created a docker volume
-      (i.e. using the [`docker volume create --name <my-volume>`command](https://docs.docker.com/storage/volumes/#create-and-manage-volumes)) and mounted it using the`-v` flag in `docker run`.
+      (i.e. using the [`docker volume create --name <my-volume>`command](https://docs.docker.com/storage/volumes/#create-and-manage-volumes)) and mounted it using the `-v` flag in `docker run`.
    ```
 
 2. **Matching the container's UID/GID with the host's**
 
    Docker handles mounting host directories differently from mounting volumes, even though the syntax is essentially the same (i.e. `-v`).
 
-   When you initialize a Docker container using the flag `-v`, the host directories are bind-mounted directly into the container.
+   When you initialize a Docker container using the `-v`flag, the host directories are bind-mounted directly into the container.
    Therefore, the permissions and ownership are copied over and will be **the same** as the ones in your local host
    (including user ids) which may result in permissions errors when trying to access directories or create/modify files inside.
 
@@ -128,7 +128,7 @@ The following sections cover a few of these scenarios and how to fix them.
 
 If you have also **created a new user**, you might be experiencing any of the following issues:
 
-- `root` is the owner of `/home` or a mounted volume
+- the `root` user is the owner of `/home` or a mounted volume
 - when starting the container, you get an error such as `Failed to change ownership of the home directory.`
 - getting permission denied when trying to `conda install` packages
 
@@ -270,14 +270,14 @@ conda config --show default_channels
 
 **Installing packages from alternative channels:**
 
-You can install packages from other conda channels (e.g. bioconda) by disabling the `channel_priority` setting:
+You can install packages from other conda channels (e.g. `bioconda`) by disabling the `channel_priority` setting:
 
 ```bash
 # install by disabling channel priority at еру command level
 conda install --no-channel-priority -c bioconda bioconductor-geoquery
 ```
 
-Additional details are provided in the [Using alternative channels](../using/common.md#using-alternative-channels) section of the [Common features](common.md) page.
+Additional details are provided in the [Using Alternative Channels](../using/common.md#using-alternative-channels) section of the [Common Features](common.md) page.
 
 ## Tokens are being rejected
 
@@ -334,7 +334,7 @@ you might experience either of these issues when using any of the docker-stacks 
    ```
 
    When the terminal provides the link to access Jupyter: <http://127.0.0.1:8888/lab?token=80d45d241a1ba4c2...>,
-   change the default port value of `8888` in the url to the port value mapped with the `docker run` command.
+   change the default port value of `8888` in the URL to the port value mapped with the `docker run` command.
 
    In this example, we use 8001, so the edited link would be: <http://127.0.0.1:8001/lab?token=80d45d241a1ba4c2...>.
 

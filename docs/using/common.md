@@ -22,7 +22,7 @@ You can pass [Jupyter Server options](https://jupyter-server.readthedocs.io/en/l
 2. To set the [base URL](https://jupyter-server.readthedocs.io/en/latest/operators/public-server.html#running-the-notebook-with-a-customized-url-prefix) of the Jupyter Server, you can run the following:
 
    ```bash
-   docker run  -it --rm -p 8888:8888 quay.io/jupyter/base-notebook \
+   docker run -it --rm -p 8888:8888 quay.io/jupyter/base-notebook \
        start-notebook.py --ServerApp.base_url=/customized/url/prefix/
    ```
 
@@ -50,6 +50,11 @@ You do so by passing arguments to the `docker run` command.
       -e CHOWN_HOME=yes \
       -w "/home/my-username" \
       quay.io/jupyter/base-notebook
+  ```
+
+  ```{note}
+  If you set `NB_USER` to `root`, the `root` home dir will be set to `/home/root`.
+  See discussion [here](https://github.com/jupyter/docker-stacks/issues/2042).
   ```
 
 - `-e NB_UID=<numeric uid>` - Instructs the startup script to switch the numeric user ID of `${NB_USER}` to the given value.
@@ -220,20 +225,16 @@ docker run -it --rm \
 
 ### `start.sh`
 
-The `start-notebook.py` script inherits most of its option handling capability from a more generic `start.sh` script.
-The `start.sh` script supports all the features described above but allows you to specify an arbitrary command to execute.
+Most of the configuration options in the `start-notebook.py` script are handled by an internal `start.sh` script that automatically runs before the command provided to the container
+(it's set as the container entrypoint).
+This allows you to specify an arbitrary command that takes advantage of all these features.
 For example, to run the text-based `ipython` console in a container, do the following:
 
 ```bash
-docker run -it --rm quay.io/jupyter/base-notebook start.sh ipython
+docker run -it --rm quay.io/jupyter/base-notebook ipython
 ```
 
 This script is handy when you derive a new Dockerfile from this image and install additional Jupyter applications with subcommands like `jupyter console`, `jupyter kernelgateway`, etc.
-
-### Others
-
-You can bypass the provided scripts and specify an arbitrary start command.
-If you do, keep in mind that features supported by the `start.sh` script and its kin will not function (e.g., `GRANT_SUDO`).
 
 ## Conda Environments
 
@@ -242,7 +243,7 @@ The `/opt/conda/bin` directory is part of the default `jovyan` user's `${PATH}`.
 That directory is also searched for binaries when run using `sudo` (`sudo my_binary` will search for `my_binary` in `/opt/conda/bin/`
 
 The `jovyan` user has full read/write access to the `/opt/conda` directory.
-You can use either `mamba`, `pip` or `conda` (`mamba` is recommended) to install new packages without any additional permissions.
+You can use either `mamba`, `pip`, or `conda` (`mamba` is recommended) to install new packages without any additional permissions.
 
 ```bash
 # install a package into the default (python 3.x) environment and cleanup it after
@@ -262,7 +263,7 @@ conda install --yes some-package && \
     fix-permissions "/home/${NB_USER}"
 ```
 
-### Using alternative channels
+### Using Alternative Channels
 
 Conda is configured by default to use only the [`conda-forge`](https://anaconda.org/conda-forge) channel.
 However, you can use alternative channels, either one-shot by overwriting the default channel in the installation command or by configuring `mamba` to use different channels.

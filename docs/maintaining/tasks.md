@@ -10,30 +10,30 @@ To build new images and publish them to the Registry, do the following:
 
    ```{note}
    GitHub Actions are pretty reliable, so please investigate if some error occurs.
-   Building Docker images in PRs is the same as building them in default branch,
+   Building Docker images in PRs is the same as building them in the default branch,
    except single-platform images are pushed to Registry and then tags are merged for `x86_64` and `aarch64`.
    ```
 
 4. Avoid merging another PR to the main branch until all pending builds in the main branch are complete.
    This way, you will know which commit might have broken the build
-   and also have the correct tags for moving tags (like the `python` version).
+   and also have the correct tags for moving tags (like the `Python` version).
 
 ## Updating Python version
 
 When a new `Python` version is released, we wait for:
 
 - all the dependencies to be available (as wheels or in `conda-forge`).
-- the first `python` patch release for this version.
+- the first `Python` patch release for this version.
   This allows us to avoid many bugs, which can happen in a major release.
 
 ## Updating the Ubuntu Base Image
 
 `jupyter/docker-stacks-foundation` is based on the LTS Ubuntu docker image.
-We wait for the first point release of the new LTS Ubuntu before updating the version.
+We are waiting for the first point release of the new LTS Ubuntu before updating the version.
 Other images are directly or indirectly inherited from `docker-stacks-foundation`.
 We rebuild our images automatically each week, which means they frequently receive updates.
 
-When there's a security fix in the Ubuntu base image, it's a good idea to manually trigger images rebuild
+When there's a security fix in the Ubuntu base image, it's a good idea to manually trigger the rebuild of images
 [from the GitHub actions workflow UI](https://github.com/jupyter/docker-stacks/actions/workflows/docker.yml).
 Pushing the `Run Workflow` button will trigger this process.
 
@@ -58,6 +58,7 @@ When there's a new stack definition, check before merging the PR:
    in the [tagging](https://github.com/jupyter/docker-stacks/tree/main/tagging) folder.
 4. A new repository is created in the `jupyter` organization in the Registry,
    and it's named after the stack folder in the git repo.
+5. Robot `Write` permission is added in the `Repository Settings`.
 
 ## Adding a New Registry Owner Account
 

@@ -10,17 +10,17 @@ This section provides details about the second.
 ## Using the Docker CLI
 
 You can launch a local Docker container from the Jupyter Docker Stacks using the [Docker command-line interface](https://docs.docker.com/engine/reference/commandline/cli/).
-There are numerous ways to configure containers using the CLI.
+There are numerous ways to configure containers using CLI.
 The following are some common patterns.
 
 ### Example 1
 
-This command pulls the `jupyter/scipy-notebook` image tagged `2023-10-31` from Quay.io if it is not already present on the local host.
+This command pulls the `jupyter/scipy-notebook` image tagged `2024-02-24` from Quay.io if it is not already present on the local host.
 It then starts a container running Jupyter Server with the JupyterLab frontend and exposes the server on host port 8888.
 The server logs appear in the terminal and include a URL to the server.
 
 ```bash
-docker run -it -p 8888:8888 quay.io/jupyter/scipy-notebook:2023-10-31
+docker run -it -p 8888:8888 quay.io/jupyter/scipy-notebook:2024-02-24
 
 # Entered start.sh with args: jupyter lab
 
@@ -39,7 +39,7 @@ Pressing `Ctrl-C` twice shuts down the Server but leaves the container intact on
 # list containers
 docker ps --all
 # CONTAINER ID   IMAGE                                       COMMAND                  CREATED              STATUS                     PORTS     NAMES
-# eca4aa01751c   quay.io/jupyter/scipy-notebook:2023-10-31   "tini -g -- start-no…"   About a minute ago   Exited (0) 5 seconds ago             silly_panini
+# eca4aa01751c   quay.io/jupyter/scipy-notebook:2024-02-24   "tini -g -- start-no…"   About a minute ago   Exited (0) 5 seconds ago             silly_panini
 
 # start the stopped container
 docker start --attach -i eca4aa01751c
@@ -53,12 +53,12 @@ docker rm eca4aa01751c
 
 ### Example 2
 
-This command pulls the `jupyter/r-notebook` image tagged `2023-10-31` from Quay.io if it is not already present on the local host.
+This command pulls the `jupyter/r-notebook` image tagged `2024-02-24` from Quay.io if it is not already present on the local host.
 It then starts a container running Server and exposes the server on host port 10000.
-The server logs appear in the terminal and include a URL to the Server, but with the internal container port (8888) instead of the correct host port (10000).
+The server logs appear in the terminal and include a URL to the Server but with the internal container port (8888) instead of the correct host port (10000).
 
 ```bash
-docker run -it --rm -p 10000:8888 -v "${PWD}":/home/jovyan/work quay.io/jupyter/r-notebook:2023-10-31
+docker run -it --rm -p 10000:8888 -v "${PWD}":/home/jovyan/work quay.io/jupyter/r-notebook:2024-02-24
 ```
 
 Pressing `Ctrl-C` twice shuts down the Server and immediately destroys the Docker container.
@@ -69,7 +69,7 @@ Any other changes made in the container will be lost.
 By default, [jupyter's root_dir](https://jupyter-server.readthedocs.io/en/latest/other/full-config.html) is `/home/jovyan`.
 So, new notebooks will be saved there, unless you change the directory in the file browser.
 
-To change the default directory, you will need to specify `ServerApp.root_dir` by adding this line to previous command: `start-notebook.py --ServerApp.root_dir=/home/jovyan/work`.
+To change the default directory, you will need to specify `ServerApp.root_dir` by adding this line to the previous command: `start-notebook.py --ServerApp.root_dir=/home/jovyan/work`.
 ```
 
 ### Example 3
@@ -138,16 +138,16 @@ subuidSize=$(( $(podman info --format "{{ range .Host.IDMappings.UIDMap }}+{{.Si
 subgidSize=$(( $(podman info --format "{{ range .Host.IDMappings.GIDMap }}+{{.Size }}{{end }}" ) - 1 ))
 ```
 
-This command pulls the `quay.io/jupyter/r-notebook` image tagged `2023-10-31` from Quay.io if it is not already present on the local host.
+This command pulls the `quay.io/jupyter/r-notebook` image tagged `2024-02-24` from Quay.io if it is not already present on the local host.
 It then starts a container running a Jupyter Server with the JupyterLab frontend and exposes the server on host port 10000.
-The server logs appear in the terminal and include a URL to the server, but with the internal container port (8888) instead of the correct host port (10000).
+The server logs appear in the terminal and include a URL to the server but with the internal container port (8888) instead of the correct host port (10000).
 
 ```bash
 podman run -it --rm -p 10000:8888 \
     -v "${PWD}":/home/jovyan/work --user $uid:$gid \
     --uidmap $uid:0:1 --uidmap 0:1:$uid --uidmap $(($uid+1)):$(($uid+1)):$(($subuidSize-$uid)) \
     --gidmap $gid:0:1 --gidmap 0:1:$gid --gidmap $(($gid+1)):$(($gid+1)):$(($subgidSize-$gid)) \
-    quay.io/jupyter/r-notebook:2023-10-31
+    quay.io/jupyter/r-notebook:2024-02-24
 ```
 
 ```{warning}
@@ -170,11 +170,11 @@ Any other changes made in the container will be lost.
 
 ## Using Binder
 
-[Binder](https://mybinder.org/) is a service that allows you to create and share custom computing environments for projects in version control.
+A [Binder](https://mybinder.org/) is a service that allows you to create and share custom computing environments for projects in version control.
 You can use any of the Jupyter Docker Stacks images as a basis for a Binder-compatible Dockerfile.
 See the
 [docker-stacks example](https://mybinder.readthedocs.io/en/latest/examples/sample_repos.html#using-a-docker-image-from-the-jupyter-docker-stacks-repository) and
-[Using a Dockerfile](https://mybinder.readthedocs.io/en/latest/tutorials/dockerfile.html) sections in the
+[Using a Dockerfile](https://mybinder.readthedocs.io/en/latest/tutorials/dockerfile.html) section in the
 [Binder documentation](https://mybinder.readthedocs.io/en/latest/index.html) for instructions.
 
 ## Using JupyterHub
@@ -188,5 +188,5 @@ instructions for the [dockerspawner](https://github.com/jupyterhub/dockerspawner
 ## Using Other Tools and Services
 
 You can use the Jupyter Docker Stacks with any Docker-compatible technology
-(e.g., [Docker Compose](https://docs.docker.com/compose/), [docker-py](https://github.com/docker/docker-py), your favorite cloud container service).
+(e.g., [Docker Compose](https://docs.docker.com/compose/), [docker-py](https://github.com/docker/docker-py), or your favorite cloud container service).
 See the documentation of the tool, library, or service for details about how to reference, configure, and launch containers from these images.
