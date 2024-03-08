@@ -139,7 +139,9 @@ RUN set -x && \
     fix-permissions "/home/${NB_USER}"
 
 # Add system cudaq module to base conda
-RUN echo "/opt/nvidia/cudaq" > ${CONDA_DIR}/lib/python3.10/site-packages/cudaq.pth
+
+RUN touch ${CONDA_DIR}/lib/python3.10/site-packages/cudaq.pth && \
+    echo "/opt/nvidia/cudaq" > ${CONDA_DIR}/lib/python3.10/site-packages/cudaq.pth
 
 # Configure container startup
 ENTRYPOINT ["tini", "-g", "--"]
